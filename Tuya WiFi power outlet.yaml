@@ -1,0 +1,212 @@
+zabbix_export:
+  version: '7.2'
+  template_groups:
+    - uuid: 3dcd5bbe90534f9e8eb5c2d53756af63
+      name: Templates/Power
+  templates:
+    - uuid: f2412ab89af04c0180f9456f0b70339c
+      template: 'Tuya Gniazdko WiFi'
+      name: 'Tuya Gniazdko WiFi'
+      groups:
+        - name: Templates/Power
+      items:
+        - uuid: b3600a2333d24314a03e379ba746c7b2
+          name: 'Child Lock'
+          type: DEPENDENT
+          key: status.child.lock
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.dps.41
+            - type: STR_REPLACE
+              parameters:
+                - 'true'
+                - '1'
+            - type: STR_REPLACE
+              parameters:
+                - 'false'
+                - '0'
+          master_item:
+            key: 'tuya_status.py[{$HOST.IP},{$DEVICE.ID},{$LOCAL.KEY},{$PROTOCOL.VER}]'
+        - uuid: c7be00b45df54f3bb002c90c455e99af
+          name: Current
+          type: DEPENDENT
+          key: status.current
+          value_type: FLOAT
+          trends: '0'
+          units: A
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.dps.18
+          master_item:
+            key: 'tuya_status.py[{$HOST.IP},{$DEVICE.ID},{$LOCAL.KEY},{$PROTOCOL.VER}]'
+        - uuid: 1ff8ae55a94b46478a9280da60bf1471
+          name: 'Electric Coefficient'
+          type: DEPENDENT
+          key: status.electric.coef
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.dps.23
+          master_item:
+            key: 'tuya_status.py[{$HOST.IP},{$DEVICE.ID},{$LOCAL.KEY},{$PROTOCOL.VER}]'
+        - uuid: 84cb96c5e4044a59bedbb9da5d10f416
+          name: 'Electricity Coefficient'
+          type: DEPENDENT
+          key: status.electricity.coef
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.dps.25
+          master_item:
+            key: 'tuya_status.py[{$HOST.IP},{$DEVICE.ID},{$LOCAL.KEY},{$PROTOCOL.VER}]'
+        - uuid: 87b53db0900c436788dfea4e517eef27
+          name: 'Light Mode'
+          type: DEPENDENT
+          key: status.light.mode
+          value_type: TEXT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.dps.40
+          master_item:
+            key: 'tuya_status.py[{$HOST.IP},{$DEVICE.ID},{$LOCAL.KEY},{$PROTOCOL.VER}]'
+        - uuid: e018d0db9efd4530bb133f02baeb2d85
+          name: Status
+          type: DEPENDENT
+          key: status.on
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.dps.1
+            - type: STR_REPLACE
+              parameters:
+                - 'true'
+                - '1'
+            - type: STR_REPLACE
+              parameters:
+                - 'false'
+                - '0'
+          master_item:
+            key: 'tuya_status.py[{$HOST.IP},{$DEVICE.ID},{$LOCAL.KEY},{$PROTOCOL.VER}]'
+        - uuid: c25764fd09d84e9586fdad07687aa666
+          name: Power
+          type: DEPENDENT
+          key: status.power
+          value_type: FLOAT
+          trends: '0'
+          units: W
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.dps.19
+          master_item:
+            key: 'tuya_status.py[{$HOST.IP},{$DEVICE.ID},{$LOCAL.KEY},{$PROTOCOL.VER}]'
+        - uuid: a1f36c92d1564ca9bff5c2198c0f9912
+          name: 'Power Coefficient'
+          type: DEPENDENT
+          key: status.power.coef
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.dps.24
+          master_item:
+            key: 'tuya_status.py[{$HOST.IP},{$DEVICE.ID},{$LOCAL.KEY},{$PROTOCOL.VER}]'
+        - uuid: 332963ebac3e418e83203235f8eb3cd3
+          name: 'Relay Status'
+          type: DEPENDENT
+          key: status.relay
+          value_type: TEXT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.dps.38
+          master_item:
+            key: 'tuya_status.py[{$HOST.IP},{$DEVICE.ID},{$LOCAL.KEY},{$PROTOCOL.VER}]'
+        - uuid: 009dca9874b1492f8e3309ababc1d18b
+          name: Voltage
+          type: DEPENDENT
+          key: status.voltage
+          value_type: FLOAT
+          trends: '0'
+          units: V
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.dps.20
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+          master_item:
+            key: 'tuya_status.py[{$HOST.IP},{$DEVICE.ID},{$LOCAL.KEY},{$PROTOCOL.VER}]'
+        - uuid: 6e806867318e4fcc9a51b6409571f59f
+          name: 'Voltage Coefficient'
+          type: DEPENDENT
+          key: status.voltage.coef
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.dps.22
+          master_item:
+            key: 'tuya_status.py[{$HOST.IP},{$DEVICE.ID},{$LOCAL.KEY},{$PROTOCOL.VER}]'
+        - uuid: 3699c92fe112477d971dc37106dd1da8
+          name: Data
+          type: EXTERNAL
+          key: 'tuya_status.py[{$HOST.IP},{$DEVICE.ID},{$LOCAL.KEY},{$PROTOCOL.VER}]'
+          history: '0'
+          value_type: TEXT
+          timeout: 30s
+      macros:
+        - macro: '{$DEVICE.ID}'
+        - macro: '{$HOST.IP}'
+        - macro: '{$LOCAL.KEY}'
+        - macro: '{$PROTOCOL.VER}'
+          value: '3.4'
+  graphs:
+    - uuid: f3ebeb02bcc74282964ae7cfc1d04c31
+      name: 'Child Lock'
+      graph_items:
+        - color: 199C0D
+          calc_fnc: ALL
+          item:
+            host: 'Tuya Gniazdko WiFi'
+            key: status.child.lock
+    - uuid: 1b092c7ea2764e95aeb0c09cf0b7cbc8
+      name: Current
+      graph_items:
+        - color: 199C0D
+          calc_fnc: ALL
+          item:
+            host: 'Tuya Gniazdko WiFi'
+            key: status.current
+    - uuid: 2ef980ea170b444b8fc8ead4f0c2b992
+      name: On/Off
+      graph_items:
+        - color: 199C0D
+          calc_fnc: ALL
+          item:
+            host: 'Tuya Gniazdko WiFi'
+            key: status.on
+    - uuid: 21e3223a99ef4117861fbcae6d16f023
+      name: Power
+      graph_items:
+        - color: 199C0D
+          calc_fnc: ALL
+          item:
+            host: 'Tuya Gniazdko WiFi'
+            key: status.power
+    - uuid: bf425cb9624e4d049c739d73094557fe
+      name: Voltage
+      graph_items:
+        - color: 199C0D
+          calc_fnc: ALL
+          item:
+            host: 'Tuya Gniazdko WiFi'
+            key: status.voltage
