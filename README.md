@@ -3,10 +3,12 @@ To use the template you will need to place tuya_status.py in the /usr/lib/zabbix
 To use tuya_status run:
 
 ```python3 tuya_status.py <IP> <DEVICE.ID> <LOCAL.KEY> <PROTOCOL.VERSION>```
+
 <PROTOCOL.VERSION> is 3.1, 3.2, 3.3 or 3.4
 This will produce a json
 For more readible form add --pretty which should give output like:
 ```
+
 Device status (pretty):
 Switch ON/OFF: True
 DPS 9: 0
